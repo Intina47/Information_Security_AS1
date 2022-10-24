@@ -118,7 +118,7 @@ void forgot_username()
 {
     char password[20];
     cout << "enter password: ";
-    cin.getline(password, 20);
+    cin >> password;
     //search for the password in the file
     ifstream f_in;
     f_in.open("user.txt");
@@ -142,7 +142,7 @@ void forgot_password()
 {
     char username[20];
     cout << "enter username: ";
-    cin.getline(username, 20);
+    cin >> username;
     //search for the username in the file
     ifstream f_in;
     f_in.open("user.txt");
