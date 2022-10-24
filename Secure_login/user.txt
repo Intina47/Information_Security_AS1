@@ -2,3 +2,5 @@
  ntina
 iam_mamba Mrmamba
 ntina MrPanda
+mamba Mrmamba
+ntina MrPanda

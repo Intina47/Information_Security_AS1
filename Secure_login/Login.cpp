@@ -3,6 +3,7 @@
 #include<stdio.h>
 #include<string.h>
 using namespace std;
+
 #include "login.h"
 
 
@@ -15,28 +16,40 @@ int main()
 void main_menu()
 {
     int choice;
-    cout << "1. Register\n2. Login\n3. Forgot Credentials\nKindly make a Choice to proceed: ";
+    cout << "Welcome to the Secure Login System" << endl;
+    cout << "Please select from the menu options below" << endl;
+    cout << "*******************************************"<< endl;
+    cout << "1. Register\n2. Login\n3. Forgot Credentials\n4. Exit\n  => ";
     cin >> choice;
+    while(choice != 4)
+    {     
+        switch (choice)
+        {
+            case 1: 
+                register_user();
+                break;
+        
+            case 2: 
+                login_user();
+                break;
+                
+            case 3:
+                forgot_credentials();
+                break;
 
-    switch (choice)
-    {
-        case 1: 
-            register_user();
-            break;
-    
-        case 2: 
-            login_user();
-            break;
-            
-        case 3:
-            forgot_credentials();
-            break;
+            case 4:
+                cout << "\nSystem Exiting..!\n";
+                exit(0);
+                break;    
 
-        default:
-            cout << "Invalid Choice" << endl;
-       
+            default:
+                cout << "\nInvalid Choice\n" << endl;
+        } 
+        cout << "1. Register\n2. Login\n3. Forgot Credentials\n4. Exit\n  => ";
+        cin >> choice; 
     }
 }
+
 
 //register a user using a while loop until the user enters the same password twice
 void register_user()
@@ -52,7 +65,7 @@ void register_user()
     
     while (strcmp(password1, password2) != 0)
     {
-        cout << "Passwords do not match" << endl;
+        cout << "\nPasswords do not match" << endl;
         cout << "enter password:";
         cin.getline(password1,20);
 
@@ -63,7 +76,7 @@ void register_user()
     f_out.open("user.txt", ios::app);
     f_out << username << " " << password1 << endl;
     f_out.close();
-    cout << "Registration Successful" << endl;
+    cout << "\nRegistration Successful\n" << endl;
 }
 void login_user()
 {
@@ -82,13 +95,13 @@ void login_user()
         f_in >> user >> pass;
         if (strcmp(user, username) == 0 && strcmp(pass, password) == 0)
         {
-            cout << "Login Successful" << endl;
+            cout << "\nLogin Successful\n" << endl;
             break;
         }
     }
     if (f_in.eof())
     {
-        cout << "Invalid Credentials" << endl;
+        cout << "\nInvalid Credentials\n" << endl;
     }
     f_in.close();
 }
@@ -110,7 +123,7 @@ void forgot_credentials()
             break;
 
         default:
-            cout << "Invalid Choice" << endl;
+            cout << "\nInvalid Choice\n" << endl;
        
     }
 }
@@ -128,13 +141,13 @@ void forgot_username()
         f_in >> user >> pass;
         if (strcmp(pass, password) == 0)
         {
-            cout << "Your username is: " << user << endl;
+            cout << "\nYour username is: " << user << endl;
             break;
         }
     }
     if (f_in.eof())
     {
-        cout << "Invalid Credentials" << endl;
+        cout << "\nInvalid Credentials\n" << endl;
     }
 }
 
@@ -152,12 +165,12 @@ void forgot_password()
         f_in >> user >> pass;
         if (strcmp(user, username) == 0)
         {
-            cout << "Your password is: " << pass << endl;
+            cout << "\nYour password is: " << pass << endl;
             break;
         }
     }
     if (f_in.eof())
     {
-        cout << "Invalid Credentials" << endl;
+        cout << "\nInvalid Credentials\n" << endl;
     }
 }
