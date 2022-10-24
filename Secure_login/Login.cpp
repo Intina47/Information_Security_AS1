@@ -42,17 +42,17 @@ void main_menu()
 void register_user()
 {
     char username[20], password1[20], password2[20];
-    cin.getline(username, 20);
+    
     cout << "Enter Username: ";
-    cout<<endl;
+    cin.getline(username, 20);
+    cin.ignore();
 
-    cin.getline(password1,20);
     cout << "enter password:";
-    cout<<endl;
+    cin.getline(password1,20);
 
-    cin.getline(password2,20);
     cout<< "Enter Password again:";
-    cout<<endl;
+    cin.getline(password2,20);
+    
     
     while (strcmp(password1, password2) != 0)
     {
@@ -73,9 +73,9 @@ void login_user()
 {
     char username[20], password[20];
     cout << "enter username: ";
-    cin.getline(username, 20);
+    cin >> username;
     cout << "enter password: ";
-    cin.getline(password, 20);
+    cin >> password;
 
 
     ifstream f_in;
@@ -118,7 +118,6 @@ void forgot_credentials()
        
     }
 }
-
 void forgot_username()
 {
     char password[20];
