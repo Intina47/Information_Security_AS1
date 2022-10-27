@@ -1,7 +1,7 @@
 #include <iostream>
 #include <fstream> 
 #include <string.h>
-#include <openssl/sha.h>
+#include "openssl/sha.h"
 #include "authlib.h"
 
 
@@ -106,13 +106,17 @@ void login_user()
 
     f_in.close();
 
-    char pass_array[password.length() + 1];
-    strcpy(pass_array, password.c_str());
+  
+  unsigned char pass_array [20];
+  for(unsigned int i=0; i<password.length(); i++)
+      {
+          pass_array[i] = password[i];
+      }
+  unsigned int len = strlen ((const char*) pass_array);
+  unsigned char hash [SHA256_DIGEST_LENGTH];
 
-    unsigned char hash [SHA256_DIGEST_LENGTH];
-
-    int hashPointer = SHA256 (pass_array, sizeof(pass_array), hash));
+  SHA256(pass_array, len, hash);
    // https://bitcoin.stackexchange.com/questions/111506/proper-way-to-get-sha256-hash-in-c-using-openssl
 
-   cout << hashPointer;
+   cout << hash;
 }
