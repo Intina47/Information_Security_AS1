@@ -105,4 +105,14 @@ void login_user()
         }
 
     f_in.close();
+
+    char pass_array[password.length() + 1];
+    strcpy(pass_array, password.c_str());
+
+    unsigned char hash [SHA256_DIGEST_LENGTH];
+
+    int hashPointer = SHA256 (pass_array, sizeof(pass_array), hash));
+   // https://bitcoin.stackexchange.com/questions/111506/proper-way-to-get-sha256-hash-in-c-using-openssl
+
+   cout << hashPointer;
 }
