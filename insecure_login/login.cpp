@@ -1,14 +1,30 @@
 #include <iostream>
 #include <fstream> 
 #include <string.h>
-#include "openssl/sha.h"
 #include "authlib.h"
+#include <sstream>
 
 
 void register_user();
 void login_user();
 
 using namespace std;
+
+#include <openssl/sha.h>
+#include <openssl/evp.h>
+
+//modified version of https://stackoverflow.com/questions/3969047/is-there-a-standard-way-of-representing-an-sha1-hash-as-a-c-string-and-how-do-i
+string GetHexRepresentation(const unsigned char *Bytes) {
+    string ret;
+    ret.reserve(SHA256_DIGEST_LENGTH * 2);
+    for(const unsigned char *ptr = Bytes; ptr < Bytes+SHA256_DIGEST_LENGTH; ++ptr) {
+        char buf[3];
+        sprintf(buf, "%02x", (*ptr)&0xff);
+        ret += buf;
+    }
+    return ret;
+}
+
 
 
 int main() {
@@ -62,9 +78,29 @@ void register_user()
 
         cin >> password2;
     }
+
+    unsigned char pass_arr[sizeof(password1)]; 
+
+    for (int i = 0; i < sizeof(password1); i++) {
+        pass_arr[i] = password1[i];
+    }
+
+    unsigned int len = strlen ((const char*) pass_arr);
+    unsigned char hash [SHA256_DIGEST_LENGTH];
+
+    SHA256(pass_arr, len, hash);
+
+
+    string hashed_pass = GetHexRepresentation(hash);
+
     ofstream f_out;
+
+    for(unsigned int j = 0; j < SHA256_DIGEST_LENGTH; j++){
+    printf("%02hhX", hash[j]);
+    }
+
     f_out.open("passwords.txt", ios::app);
-    f_out << username << ":" << password1 << endl;
+    f_out << username << ":" << hashed_pass << endl;
     f_out.close();
     cout << "\nRegistration Successful\n" << endl;
 }
@@ -76,6 +112,19 @@ void login_user()
     cout << "enter password: ";
     cin >> password;
 
+    unsigned char pass_arr[sizeof(password)]; 
+
+    for (int i = 0; i < sizeof(password); i++) {
+        pass_arr[i] = password[i];
+    }
+
+    unsigned int len = strlen ((const char*) pass_arr);
+    unsigned char hash [SHA256_DIGEST_LENGTH];
+
+    SHA256(pass_arr, len, hash);
+
+    string hashed_pass = GetHexRepresentation(hash);
+
     ifstream f_in;
     f_in.open("passwords.txt");
     string user, pass;
@@ -84,8 +133,9 @@ void login_user()
         getline(f_in, user, ':'); 
 
         getline(f_in, pass);
+
         
-        if (user == username && pass == password)
+        if (user == username && pass == hashed_pass)
         {
             cout << "\nLogin Successful\n" << endl;
             
@@ -105,18 +155,4 @@ void login_user()
         }
 
     f_in.close();
-
-  
-  unsigned char pass_array [20];
-  for(unsigned int i=0; i<password.length(); i++)
-      {
-          pass_array[i] = password[i];
-      }
-  unsigned int len = strlen ((const char*) pass_array);
-  unsigned char hash [SHA256_DIGEST_LENGTH];
-
-  SHA256(pass_array, len, hash);
-   // https://bitcoin.stackexchange.com/questions/111506/proper-way-to-get-sha256-hash-in-c-using-openssl
-
-   cout << hash;
 }
