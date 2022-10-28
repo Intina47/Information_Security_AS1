@@ -25,6 +25,24 @@ string GetHexRepresentation(const unsigned char *Bytes) {
     return ret;
 }
 
+string HashFunction(string password1){
+    unsigned char pass_arr[sizeof(password1)]; 
+
+    for (int i = 0; i < sizeof(password1); i++) {
+        pass_arr[i] = password1[i];
+    }
+
+    unsigned int len = strlen ((const char*) pass_arr);
+    unsigned char hash [SHA256_DIGEST_LENGTH];
+
+    SHA256(pass_arr, len, hash);
+
+    string ret = GetHexRepresentation(hash); 
+
+    return ret; 
+  
+}
+
 
 
 int main() {
@@ -79,25 +97,9 @@ void register_user()
         cin >> password2;
     }
 
-    unsigned char pass_arr[sizeof(password1)]; 
-
-    for (int i = 0; i < sizeof(password1); i++) {
-        pass_arr[i] = password1[i];
-    }
-
-    unsigned int len = strlen ((const char*) pass_arr);
-    unsigned char hash [SHA256_DIGEST_LENGTH];
-
-    SHA256(pass_arr, len, hash);
-
-
-    string hashed_pass = GetHexRepresentation(hash);
+    string hashed_pass = HashFunction(password1);
 
     ofstream f_out;
-
-    for(unsigned int j = 0; j < SHA256_DIGEST_LENGTH; j++){
-    printf("%02hhX", hash[j]);
-    }
 
     f_out.open("passwords.txt", ios::app);
     f_out << username << ":" << hashed_pass << endl;
@@ -112,18 +114,7 @@ void login_user()
     cout << "enter password: ";
     cin >> password;
 
-    unsigned char pass_arr[sizeof(password)]; 
-
-    for (int i = 0; i < sizeof(password); i++) {
-        pass_arr[i] = password[i];
-    }
-
-    unsigned int len = strlen ((const char*) pass_arr);
-    unsigned char hash [SHA256_DIGEST_LENGTH];
-
-    SHA256(pass_arr, len, hash);
-
-    string hashed_pass = GetHexRepresentation(hash);
+    string hashed_pass = HashFunction(password);
 
     ifstream f_in;
     f_in.open("passwords.txt");
