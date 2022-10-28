@@ -57,10 +57,16 @@ int main() {
     register_user();
     break;
 
-  case 2: 
-    login_user();
-    break; 
-
+  case 2:
+    int attempts = 0;
+    while(attempts < 3)
+    {
+         login_user();
+         attempts++;
+    }
+    cout << "Too many failed login attempts. Exiting..." << endl;
+    break;      
+          
   case 3: 
     exit(0);
     break;
